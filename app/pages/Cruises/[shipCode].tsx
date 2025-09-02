@@ -1,19 +1,22 @@
+import DatePicker from "@components/Common/Filters/DatePicker";
 import SailingList from "@components/Explore/CruiseLines/SailingList";
 import PageTemplate from "@components/templates/PageTemplate";
 import { useSearchSailingsQuery } from "@store/api/Cruises/Carnival/Sailings";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import { CruiseFiltersState, setShipCode } from "@store/slices/Filters/CruiseFilters";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect } from "react";
-import { ActivityIndicator } from "react-native-paper";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, AnimatedFAB } from "react-native-paper";
 
 const CruiseSearch = () => {
     const { shipCode } = useLocalSearchParams();
+    const [extended, setExpanded] = useState(false);
     const dispatch = useAppDispatch();
     const {
         shipCode: shipcode,
         duration,
-        port
+        port,
+        dates
     } = useAppSelector('CruiseFilters') as CruiseFiltersState;
 
     useEffect(() => {
@@ -22,28 +25,34 @@ const CruiseSearch = () => {
         }
     }, [shipCode]);
 
-    const { data, isFetching } = useSearchSailingsQuery({
+    const { data, isLoading } = useSearchSailingsQuery({
         shipcode,
         durdays: duration,
-        port
+        port,
+        dates
     }, { refetchOnMountOrArgChange: true });
 
-    if (data && !isFetching) {
-        return (
-            <PageTemplate
-                headerShown
-                content={<SailingList data={data} />}
-            />
-        )
-    } else {
-        return <PageTemplate
+
+    return (
+        <PageTemplate
             headerShown
-            content={<ActivityIndicator
-                style={{ position: 'absolute', right: "45%", bottom: "55%" }}
-                size={45}
-            />}
+            content={
+                <>
+                    <DatePicker open={extended} setOpen={setExpanded} />
+                    {data && !isLoading ?
+                        <SailingList data={data} /> : <ActivityIndicator
+                            style={{ position: 'absolute', right: "45%", bottom: "55%" }}
+                            size={45}
+                        />
+                    }
+                </>}
+            floatingActionButton={<AnimatedFAB onPress={() => setExpanded(!extended)} extended={extended} icon={"filter"} label="Filters" style={{
+                bottom: 40,
+                right: 40,
+                position: 'absolute',
+            }} />}
         />
-    }
+    );
 }
 
 export default CruiseSearch;

@@ -1,22 +1,19 @@
-import DatePicker from '@components/Common/Filters/DatePicker';
+import { ThemedCard, ThemedText } from "@components/ui/ThemedComponents";
 import { useAppDispatch, useAppSelector } from '@store/index';
 import { setCountdown, VacationStateType } from '@store/slices/VacationCountdown';
 import { DateTime } from 'luxon';
 import { useEffect, useState } from "react";
 import { Button } from 'react-native-paper';
-import PageTemplate from "../../src/components/templates/PageTemplate";
-import ThemedCard from "../../src/components/ui/ThemedComponents/ThemedCard";
-import ThemedText from "../../src/components/ui/ThemedComponents/ThemedText";
+import { PageTemplate } from "../../src/components/templates";
 
 
 const Landing = () => (
     <>
-        <ThemedCard style={{paddingVertical: 20}}>
+        <ThemedCard style={{ paddingVertical: 20 }}>
             <ThemedText style={{ fontWeight: 'bold', fontSize: 15 }}>
                 Countdown
             </ThemedText>
             <Countdown />
-            <DatePicker/>
         </ThemedCard>
     </>
 )

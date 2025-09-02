@@ -4,13 +4,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Props {
     content: React.ReactNode;
-    containerStyles?: StyleProp<ViewStyle>
+    containerStyles?: StyleProp<ViewStyle>;
     headerShown?: boolean;
-    center?: boolean
+    center?: boolean;
+    floatingActionButton?: React.ReactNode;
 }
 
 
-const PageTemplate = ({ content, headerShown, containerStyles, center }: Props) => {
+const PageTemplate = ({ content, headerShown, containerStyles, center, floatingActionButton }: Props) => {
 
     const ColorScheme = useColorScheme();
 
@@ -28,9 +29,11 @@ const PageTemplate = ({ content, headerShown, containerStyles, center }: Props) 
     return (!headerShown ?
         <SafeAreaView style={[styles, center ? {display: 'flex', alignContent: 'center', justifyContent: 'center'} : null]}>
             {content}
+            {floatingActionButton}
         </SafeAreaView> :
         <View style={[styles, center ? {display: 'flex', alignContent: 'center', justifyContent: 'center'} : null]}>
             {content}
+            {floatingActionButton}
         </View>
     );
 }

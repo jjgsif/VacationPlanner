@@ -5,12 +5,13 @@ import CarnivalApi from "..";
 const SailingsQueryFunction =  (args: SailingsQuery): FetchArgs => {
     const {
         durdays,
+        dates,
         ...rest
     } = args;
 
     if (!durdays || durdays.length === 0) {
         return {
-            url: `/cruisesearch/api/search?durdays=${Array.from(Array(30).keys()).map(v => v + 1).join(",")}`,
+            url: `/cruisesearch/api/search?durdays=${Array.from(Array(30).keys()).map(v => v + 1).join(",")}&dates=${dates?.join(",")}`,
             params: {
                 ...rest,
                 pageSize: 100
@@ -18,7 +19,7 @@ const SailingsQueryFunction =  (args: SailingsQuery): FetchArgs => {
         }
     } else {
         return {
-            url: `/cruisesearch/api/search?durdays=${durdays.join(',')}`,
+            url: `/cruisesearch/api/search?durdays=${durdays.join(',')}&dates=${dates?.join(",")}`,
             params: {
                 ...rest,
                 pageSize: 100

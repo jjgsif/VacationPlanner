@@ -12,6 +12,7 @@ export type SailingsQuery = {
     durdays?: number[];
     port: string[];
     shipcode: string[];
+    dates?: string[]
 }
 
 export interface Sailing {

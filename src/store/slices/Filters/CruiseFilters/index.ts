@@ -4,7 +4,7 @@ export interface CruiseFiltersState {
     shipCode: string[];
     duration: number[];
     port: string[];
-    dates: number[];
+    dates: string[];
 }
 
 const initialState: CruiseFiltersState = {
@@ -22,7 +22,7 @@ const CruiseFilters = createSlice({
         setDuration: (state, action: PayloadAction<number[]>) => ({ ...state, duration: action.payload }),
         setPort: (state, action: PayloadAction<string[]>) => ({ ...state, port: action.payload }),
         setShipCode: (state, action: PayloadAction<string[]>) => ({ ...state, shipCode: action.payload }),
-        setDates: (state, action: PayloadAction<number[]>) => ({ ...state, dates: action.payload }),
+        setDates: (state, action: PayloadAction<string[]>) => ({ ...state, dates: action.payload }),
         resetFilters: () => initialState
     }
 });
