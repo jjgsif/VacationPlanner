@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 
+import useLoadFromMemory from '@hooks/startup/useLoadFromMemory';
 import { PaperProvider } from 'react-native-paper';
 import { useColorScheme } from '../src/hooks/useColorScheme';
 import store from '../src/store';
@@ -22,17 +23,26 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <PaperProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen name="pages/Cruises/[shipCode]" options={{ title: "Cruise Search" }} />
-            <Stack.Screen name="pages/Cruises/Itinerary/[itineraryId]" options={{ title: "Cruise Itineraries" }} />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </PaperProvider>
+      <App colorScheme={colorScheme} />
     </Provider>
   );
+}
+
+const App = ({ colorScheme }: { colorScheme: ReturnType<typeof useColorScheme> }) => {
+  const ready = useLoadFromMemory(['countdown']);
+  if (ready) {
+    <PaperProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
+          <Stack.Screen name="+not-found" />
+          <Stack.Screen name="pages/Cruises/[shipCode]" options={{ title: "Cruise Search" }} />
+          <Stack.Screen name="pages/Cruises/Itinerary/[itineraryId]" options={{ title: "Cruise Itineraries" }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </PaperProvider>
+  } else {
+    return null;
+  }
 }
