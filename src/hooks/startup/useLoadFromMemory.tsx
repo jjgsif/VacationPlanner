@@ -29,7 +29,6 @@ const useLoadFromMemory = (values: string[]): boolean => {
         }
     );
 
-
     return ready;
 }
 
