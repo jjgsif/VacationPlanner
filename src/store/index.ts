@@ -4,12 +4,19 @@ import CruiseApis from './api';
 import { CarnivalApi } from './api/Cruises';
 import Slices from './slices';
 
+
 const store = configureStore({
     reducer: {
         ...CruiseApis,
         ...Slices
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(CarnivalApi.middleware),
+    middleware: getDefaultMiddleware => getDefaultMiddleware(
+        {
+            thunk: true,
+            serializableCheck: false,
+            actionCreatorCheck: false
+        }
+    ).concat(CarnivalApi.middleware),
     devTools: process.env.NODE_ENV !== 'production'
 });
 

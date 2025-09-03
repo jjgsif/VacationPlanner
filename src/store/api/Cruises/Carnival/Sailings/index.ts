@@ -46,3 +46,7 @@ const SailingsEndpoints = CarnivalApi.injectEndpoints({
 export const {
     useSearchSailingsQuery
 } = SailingsEndpoints;
+
+export const {
+    useQueryState: useSailingsQueryState
+} = SailingsEndpoints.endpoints.searchSailings;

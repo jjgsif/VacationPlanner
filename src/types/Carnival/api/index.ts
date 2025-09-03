@@ -16,6 +16,8 @@ export type SailingsQuery = {
 }
 
 export interface Sailing {
+    sailings: Array<any>;
+    portsToDisplay: string[];
     shipName: string;
     dur: number;
     departurePortName: string;

@@ -1,4 +1,5 @@
 import ThemedText from "@components/ui/ThemedComponents/ThemedText";
+import { useThemeColor } from "@hooks/useThemeColor";
 import { useAppDispatch } from "@store/index";
 import { setDates } from "@store/slices/Filters/CruiseFilters";
 import { DateTime } from "luxon";
@@ -33,13 +34,15 @@ const ButtonGroup = ({ year, setYear }: ButtonGroupProps) => {
     )
 }
 
-const DatePicker = ({ open, setOpen }: { open: boolean, setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const DatePicker = ({ open }: { open: boolean }) => {
     const dispatch = useAppDispatch();
 
     const dateTime = useMemo(() => DateTime.now(), []);
     const [year, setYear] = useState(dateTime.year);
     const [monthsSel, setMonthSel] = useState(selected);
     const [yearMonthSel, setYearMonthSel] = useState<{ [index: number]: { [index: string]: boolean } }>({});
+
+    const text = useThemeColor({}, 'text');
 
     const monthSlices = [];
 
@@ -89,7 +92,7 @@ const DatePicker = ({ open, setOpen }: { open: boolean, setOpen: React.Dispatch<
                                             style={{ ...{ width: '25%', height: 40 }, ...(monthsSel[month] ? { backgroundColor: "#a63737" } : {}) }}
                                             key={month}
                                             onPress={() => setMonthSel({ ...monthsSel, [month]: !monthsSel[month] })}>
-                                            <ThemedText style={{ textAlignVertical: 'auto', fontSize: 10, fontWeight: 'semibold', fontVariant: ['contextual'], color: disabled ? "#00000" : "#fff" }}>
+                                            <ThemedText style={{ textAlignVertical: 'auto', fontSize: 10, fontWeight: 'semibold', fontVariant: ['contextual'], color: disabled ? "#00000" : (monthsSel[month] ? "#fff" : text) }}>
                                                 {month}
                                             </ThemedText>
                                         </Button>)

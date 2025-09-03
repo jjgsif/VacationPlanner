@@ -1,9 +1,10 @@
-import CruiseFilters from "./Filters/CruiseFilters";
+import { CruiseFilters } from "./Filters";
 import CountdownSlice from "./VacationCountdown";
 
 const Slices = {
-    [CountdownSlice.reducerPath]: CountdownSlice.reducer,
-    [CruiseFilters.reducerPath]: CruiseFilters.reducer
+    [CruiseFilters.reducerPath]: CruiseFilters.reducer,
+    [CountdownSlice.reducerPath]: CountdownSlice.reducer
 };
 
 export default Slices;
+

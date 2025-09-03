@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "VacationPlanner",
-    "slug": "VacationPlanner",
+    "slug": "vacation-planner",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jjgsif.vacationplanner",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +41,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ca75f464-e3d6-4b08-b6bc-0b27a9385b9c"
+      }
+    },
+    "owner": "jjgsif"
   }
 }

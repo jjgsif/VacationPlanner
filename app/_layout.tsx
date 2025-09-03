@@ -27,7 +27,8 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
             <Stack.Screen name="+not-found" />
-            <Stack.Screen name="pages/Cruises/[shipCode]" options={{title: "Cruise Search", presentation: 'modal'}}/>
+            <Stack.Screen name="pages/Cruises/[shipCode]" options={{ title: "Cruise Search" }} />
+            <Stack.Screen name="pages/Cruises/Itinerary/[itineraryId]" options={{ title: "Cruise Itineraries" }} />
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>
