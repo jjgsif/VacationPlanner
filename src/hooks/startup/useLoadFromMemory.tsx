@@ -1,17 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyValuePair } from "@react-native-async-storage/async-storage/lib/typescript/types";
-import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { useAppDispatch } from "@store/index";
-import { setNextDate } from "@store/slices/VacationCountdown";
+import { setSlice } from '@store/slices/VacationCountdown';
 import { useState } from "react";
 
-const keyActionMap: { [index: string]: ActionCreatorWithPayload<string, "VacationCountdown/setNextDate"> } = {
-    countdown: setNextDate
+const keyActionMap: { [index: string]: Function} = {
+    countdown: setSlice
 }
 
 const createActions = ([key, value]: KeyValuePair, dispatch: ReturnType<typeof useAppDispatch>) => {
     if (keyActionMap[key] && value) {
-        dispatch(keyActionMap[key](value))
+        const objectValue = JSON.parse(value);
+        dispatch(keyActionMap[key](objectValue))
     }
 }
 

@@ -3,7 +3,10 @@ import useSaveToMemory from "@hooks/startup/useSaveToMemory";
 import { useSailingsQueryState } from "@store/api/Cruises/Carnival/Sailings";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import { CruiseFiltersState } from "@store/slices/Filters/CruiseFilters";
-import { setNextDate } from "@store/slices/VacationCountdown";
+import { setAddToVacations } from "@store/slices/VacationCountdown";
+import { VacationStateType } from "@store/slices/VacationCountdown/Types";
+import { useRouter } from "expo-router";
+import { DateTime } from "luxon";
 import { FlatList, View } from "react-native";
 import { Button, Icon, List } from "react-native-paper";
 
@@ -15,6 +18,7 @@ const ItineraryDates = ({ itineraryId }: { itineraryId: string }) => {
         port
     } = useAppSelector('CruiseFilters') as CruiseFiltersState;
 
+    const countdownState = useAppSelector('VacationCountdown') as VacationStateType;
 
     const { data } = useSailingsQueryState({
         dates,
@@ -53,27 +57,69 @@ const ItineraryDates = ({ itineraryId }: { itineraryId: string }) => {
             </View>
             <FlatList
                 data={SailingInformation}
-                renderItem={itemRenderer(dispatch, saveToMem)}
+                renderItem={itemRenderer(
+                    dispatch,
+                    saveToMem,
+                    countdownState,
+                    `${ItinerarySailings.itineraryTitle} - ${ItinerarySailings.shipName}`
+                )}
             />
         </>
     )
 }
 
-const itemRenderer = (dispatch: ReturnType<typeof useAppDispatch>, {saveToMemory, saved, lastSaved}: ReturnType<typeof useSaveToMemory>) => ({ item }: any) => (
-    <List.Item
-        title={item.departureArrival}
+const itemRenderer = (
+    dispatch: ReturnType<typeof useAppDispatch>,
+    { saveToMemory, saved, lastSaved }: ReturnType<typeof useSaveToMemory>,
+    state: VacationStateType,
+    itineraryTitle: string
+
+) => ({ item }: any) => {
+    const arrivalDate = DateTime.fromISO(item.arrivalDate);
+    const departureDateTime = DateTime.fromISO(item.departureDate);
+    const router = useRouter();
+
+    const lastSavedObject = lastSaved instanceof Array ? lastSaved : lastSaved ? (JSON.parse((lastSaved as {
+        key?: string;
+        value?: string;
+    })?.value ?? "") as VacationStateType).savedVacations : [];
+
+    const savedSuccessfully = lastSaved && (JSON.stringify({
+        vacationName: itineraryTitle,
+        vacationType: 'CRUISE',
+        departureDate: item.departureDate
+    }) === JSON.stringify(lastSavedObject[lastSavedObject.length - 1]));
+
+    const submit = () => {
+        dispatch(setAddToVacations({
+            vacationName: itineraryTitle,
+            vacationType: 'CRUISE',
+            departureDate: item.departureDate
+        }));
+        saveToMemory(
+            'countdown',
+            JSON.stringify({
+                ...state, savedVacations: [...state.savedVacations, {
+                    vacationName: itineraryTitle,
+                    vacationType: 'CRUISE',
+                    departureDate: item.departureDate
+                }]
+            } as VacationStateType)
+            , () => setTimeout(() => router.navigate("/(tabs)"), 100)
+        )
+    };
+
+
+    return <List.Item
+        title={`${departureDateTime.toFormat('LLL dd, y')} - ${arrivalDate.toFormat('LLL dd, y')}`}
         right={() => (
             <Button onPress={
-                () => {
-                    dispatch(setNextDate(item.departureDate));
-                    saveToMemory("countdown", item.departureDate);
-                    
-                }
+                () => submit()
             }>
-                <Icon source={saved && item.departureDate === lastSaved['value'] ? 'check' : 'plus'} color={saved && item.departureDate === lastSaved['value'] ? "green" : "white"} size={20} />
+                <Icon source={savedSuccessfully ? 'check' : 'plus'} color={savedSuccessfully ? "green" : "white"} size={20} />
             </Button>)
         }
     />
-)
+}
 
 export default ItineraryDates;

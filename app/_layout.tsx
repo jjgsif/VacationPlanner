@@ -31,19 +31,17 @@ export default function RootLayout() {
 const App = ({ colorScheme }: { colorScheme: ReturnType<typeof useColorScheme> }) => {
   const ready = useLoadFromMemory(['countdown']);
   if (ready) {
-    return (
-      <PaperProvider>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
-            <Stack.Screen name="+not-found" />
-            <Stack.Screen name="pages/Cruises/[shipCode]" options={{ title: "Cruise Search" }} />
-            <Stack.Screen name="pages/Cruises/Itinerary/[itineraryId]" options={{ title: "Cruise Itineraries" }} />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </PaperProvider>
-    );
+    return <PaperProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false, title: "Home" }} />
+          <Stack.Screen name="+not-found" />
+          <Stack.Screen name="pages/Cruises/[shipCode]" options={{ title: "Cruise Search" }} />
+          <Stack.Screen name="pages/Cruises/Itinerary/[itineraryId]" options={{ title: "Cruise Itineraries" }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </PaperProvider>
   } else {
     return null;
   }
